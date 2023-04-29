@@ -1,4 +1,6 @@
 <template>
+  <link href="sticky-footer.css" rel="stylesheet">
+  
    <footer class="text-muted py-5">
   <div class="container">
     <p class="float-end mb-1">
