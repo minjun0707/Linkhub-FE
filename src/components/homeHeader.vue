@@ -45,9 +45,10 @@
 
 
       <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal"
-          data-bs-target="#login">Login</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signUp">Sign-up</button>
+        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-show="!loginState.isLoggedIn">로그인</button>
+        <button type="button" class="btn btn-outline-primary me-2" v-show="loginState.isLoggedIn" @click="logout()">로그아웃</button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signUp" v-show = "!loginState.isLoggedIn">회원가입</button>
       </div>
     </header>
   </div>
@@ -58,6 +59,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">로그인</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -69,17 +71,17 @@
 
               <div class="form-floating">
                 <input type="email" class="form-control" id="floatingInput" placeholder="id" v-model="state.form.email">
-                <label for="floatingInput">Email address</label>
+                <label for="floatingInput">이메일</label>
               </div>
               <div class="form-floating">
                 <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
-                  v-model="state.form.password">
-                <label for="floatingPassword">Password</label>
+                v-model="state.form.password">
+                <label for="floatingPassword">비밀번호</label>
               </div>
 
               <div class="checkbox mb-3">
               </div>
-              <button class="w-100 btn btn-lg btn-primary" @click="submit()">로그인</button>
+              <button type="button" class="w-100 btn btn-lg btn-primary" @click="login()">로그인</button>
             </form>
           </div>
 
@@ -87,7 +89,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
         </div>
       </div>
     </div>
@@ -101,7 +103,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">회원가입</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
@@ -116,24 +118,24 @@
 
           <div class="form-floating mb-5">
             <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
+            <label for="floatingInput">이메일</label>
           </div>
 
           <div class="form-floating mb-3">
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password</label>
+            <label for="floatingPassword">비밀번호</label>
           </div>
 
           <div class="form-floating mb-3">
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password check</label>
+            <label for="floatingPassword">비밀번호 확인</label>
           </div>
         </div>
 
 
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
           <button type="button" class="btn btn-primary">회원가입</button>
         </div>
       </div>
@@ -150,7 +152,13 @@ import { reactive } from "vue";
 
 export default {
   name: 'homeHeader',
+
   setup() {
+
+    const loginState = reactive({
+      isLoggedIn: false,
+    })
+
     const state = reactive({
       form: {
         email: "",
@@ -158,15 +166,47 @@ export default {
       }
     })
 
-    //로그인 api 요청
-    const submit = () => {
-      axios.post("/api/account/login", state.form).then((res) => {
-        console.log(res);
-        window.alert("로그인성공");
+    console.log(state.email);
+
+    //로그인 or 로그아웃 api 요청
+    const login = () => {
+      console.log(state.form.email); 
+      console.log(state.form.password);
+
+      axios.post("http://localhost:8080/api/login", state.form).then((res) => {
+        window.alert(res.data.message);
+        loginState.isLoggedIn = true;
+        //모달창 닫기
       })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.status == "400") {
+            window.alert(error.response.data.message);
+            state.form.password = "";
+          }
+        })
     }
 
-    return { state, submit }
+    const logout = () => {
+
+      axios.get("http://localhost:8080/api/logout", state.form).then((res) => {
+        window.alert(res.data.message);
+        loginState.isLoggedIn = false;
+      })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.status == "400") {
+            window.alert(error.response.data.message);
+            state.form.password = "";
+            loginState.isLoggedIn = false;
+          }
+        })
+    }
+
+
+
+
+    return { state, login, logout, loginState }
   }
 }
 
