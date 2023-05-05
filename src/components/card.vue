@@ -18,7 +18,7 @@
       <p class="card-text">{{ item.description }}</p>
       <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" @click="goToUrl()">이동</button>
           
           <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button> -->
         </div>
@@ -31,6 +31,8 @@
     </div>
   </div>
 </template>
+
+
    
 <script>
 export default {
@@ -39,15 +41,25 @@ export default {
     item: Object
   },
 
+  methods: {
+
+    goToUrl() {
+      window.open(this.item.url, '_blank');
+    }
+  },
+
   computed: {
     imageSrc() {
       return this.item.img;
     },
-  },
+  }
 
+  
   
 }
 </script>
+
+
 
 <style></style>
 

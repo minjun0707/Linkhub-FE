@@ -112,22 +112,22 @@
 
         <div class="modal-body">
           <div class="form-floating mb-5">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name" v-model="signUpState.form.name">
             <label for="floatingInput">이름</label>
           </div>
 
           <div class="form-floating mb-5">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="signUpState.form.email">
             <label for="floatingInput">이메일</label>
           </div>
 
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="signUpState.form.password">
             <label for="floatingPassword">비밀번호</label>
           </div>
 
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="signUpState.form.passwordCheck">
             <label for="floatingPassword">비밀번호 확인</label>
           </div>
         </div>
@@ -136,7 +136,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary">회원가입</button>
+          <button type="button" class="btn btn-primary" @click="signUp()">회원가입</button>
         </div>
       </div>
     </div>
@@ -163,6 +163,15 @@ export default {
       form: {
         email: "",
         password: ""
+      }
+    })
+    
+    const signUpState = reactive({
+      form: {
+        email: "",
+        name: "",
+        password: "",
+        passwordCheck: ""
       }
     })
 
@@ -203,10 +212,34 @@ export default {
         })
     }
 
+    const signUp = () => {
+
+axios.post("http://localhost:8080/api/sign-up",
+  {
+    email: signUpState.form.email,
+    name: signUpState.form.name,
+    password: signUpState.form.password,
+    passwordCheck: signUpState.form.passwordCheck
+  }
+
+)
+  .then((res) => {
+    window.alert(res.data.message);
+    loginState.isLoggedIn = true;
+  })
+  .catch((error) => {
+    console.log(error)
+    if (error.response.status == "400") {
+      window.alert(error.response.data.message);
+    }
+  })
+
+}
 
 
 
-    return { state, login, logout, loginState }
+
+    return { signUp,signUpState,state, login, logout, loginState }
   }
 }
 
