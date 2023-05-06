@@ -5,8 +5,9 @@
         <div class="col-lg-6 col-md-8 mx-auto">
 
 
+          
           <div class="mb-4">
-            <h4>글의 맛집을 찾아 떠나는 여행, 시작은 URL 입력부터</h4>
+            <h4>글의 맛집을 찾아 떠나는 여행, 첫걸음은 URL 입력부터</h4>
           </div>
 
 
@@ -15,10 +16,8 @@
               <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="url을 입력해주세요." v-model="urlState.url">
             </div>
             <div class="col-md-2">
-              <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#create"
-                @click="postTempCreate()">등록</button>
-              <!-- <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                data-bs-target="#error">등록</button> -->
+
+              <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#create" @click="postTempCreate">등록</button>
 
               <!-- Modal -->
               <div class="modal fade" id="create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -58,12 +57,14 @@
 
 
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" @click="postCreate()">Save changes</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                      <button type="button" class="btn btn-primary"  @click="postCreate()">저장</button>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <!-- <div v-else class="modal fade" id="create"></div> -->
             </div>
           </div>
 
@@ -104,6 +105,7 @@
 
 <script>
 
+axios.defaults.withCredentials = true;
 import card from '@/components/card'
 import axios from 'axios'
 import { reactive } from 'vue'
@@ -113,7 +115,13 @@ export default {
     card
   },
 
+
+ 
+
+
+
   setup() {
+
     const state = reactive({
       posts: []
     })
@@ -136,22 +144,30 @@ export default {
         img: ""
       }
     })
-
-
-    axios.get("http://localhost:8080/api/board/read").then((res) => {
+  
+    axios.get("http://localhost:8080/api/board/read",{ withCredentials: true }).then((res) => {
       state.posts = res.data.data.postList;
     })
 
     const postTempCreate = () => {
 
-      axios.post("http://localhost:8080/api/board/create/temp", {url : urlState.url}).then((res) => {
+    
+    
+
+    
+      axios.post("http://localhost:8080/api/board/create/temp", {
+        url : urlState.url
+      },
+      { 'Content-Type': 'application/json', withCredentials: true }
+      ).then((res) => {
         postTempState.form.url = res.data.data.url;
         postTempState.form.title = res.data.data.title;
         postTempState.form.description = res.data.data.description;
         postTempState.form.img = res.data.data.img;
-
       })
         .catch((error) => {
+
+
           console.log(error)
           if (error.response.status == "400") {
             window.alert(error.response.data.message);
@@ -167,14 +183,15 @@ export default {
           title: postTempState.form.title,
           description: postTempState.form.description,
           url: postTempState.form.url,
-
-        }
+        },
+        { 'Content-Type': 'application/json', withCredentials: true }
 
       )
         .then((res) => {
           postTempState.form.url = res.data.data.url;
           postTempState.form.title = res.data.data.title;
           postTempState.form.description = res.data.data.description;
+          window.alert(res.data.data.message);
         })
         .catch((error) => {
           console.log(error)
@@ -187,7 +204,7 @@ export default {
 
 
 
-    return { urlState,imgState, postTempState, state, postTempCreate, postCreate }
+    return {urlState,imgState, postTempState, state, postTempCreate, postCreate }
   }
 
 

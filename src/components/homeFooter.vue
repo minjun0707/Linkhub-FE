@@ -4,7 +4,7 @@
    <footer class="text-muted py-5">
   <div class="container">
 
-    <nav aria-label="...">
+    <!-- <nav aria-label="...">
   <ul class="pagination justify-content-center">
     <li class="page-item disabled">
       <span class="page-link">Previous</span>
@@ -18,13 +18,13 @@
       <a class="page-link" href="#">Next</a>
     </li>
   </ul>
-</nav>
+</nav> -->
 
     
-    <p class="float-end mb-1">
+    <!-- <p class="float-end mb-1">
       <a href="#">Back to top</a>
     </p>
-    
+     -->
   </div>
 </footer>
 </template>

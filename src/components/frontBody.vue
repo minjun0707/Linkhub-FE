@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <footer class="text-muted py-5">
    <div class="container">
      <p class="float-end mb-1">
@@ -18,5 +18,5 @@
    
    <!-- Add "scoped" attribute to limit CSS to this component only -->
    <style scoped>
-   </style>
+   </style> -->
    
