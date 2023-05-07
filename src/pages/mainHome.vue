@@ -106,6 +106,7 @@
 <script>
 
 axios.defaults.withCredentials = true;
+import Swal from 'sweetalert2';
 import mainCard from '@/components/mainCard'
 import axios from 'axios'
 import { reactive } from 'vue'
@@ -164,12 +165,23 @@ export default {
         .catch((error) => {
           
 
-          console.log(error)
-          if (error.response.status == "400") {
+          Swal.fire({
+  title: '게시글 등록 실패',
+  text: error.response.data.message,
+  icon: 'fail',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
+
       
-            window.alert(error.response.data.message);
-            window.location.reload(true);
-          }
+          // if (error.response.status == "400") {
+      
+          //   window.alert(error.response.data.message);
+          //   window.location.reload(true);
+          // }
 
           
         })
@@ -187,13 +199,35 @@ export default {
         { 'Content-Type': 'application/json', withCredentials: true }
 
       )
-        .then((res) => {
+        .then(() => {
+
+          Swal.fire({
+  title: '게시글 등록 성공',
+  icon: 'success',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
+
          
-          console.log(res.data.message);
-          window.alert(res.data.message);
-          window.location.reload(true);
+    
         })
         .catch((error) => {
+
+          Swal.fire({
+  title: '게시글 등록 실패',
+  text: error.response.data.message,
+  icon: 'fail',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
+
+
           console.log(error)
           if (error.response.status == "400") {
             window.alert(error.response.data.message);

@@ -133,6 +133,8 @@
 import axios from "axios";
 import { reactive } from "vue";
 import store from "@/scripts/store";
+import Swal from 'sweetalert2';
+
 
 axios.defaults.withCredentials = true;
 export default {
@@ -167,8 +169,8 @@ export default {
 
     const state = reactive({
       form: {
-        email: "",
-        password: ""
+        email: "MasterId@naver.com",
+        password: "123456abc"
       }
     })
     
@@ -185,23 +187,41 @@ export default {
 
     //로그인 or 로그아웃 api 요청
     const login = () => {
-      console.log(state.form.email); 
-      console.log(state.form.password);
+    
+  
 
-
-
-      axios.post("http://localhost:8080/api/login", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then((res) => {
-        window.location.reload(true);
+      axios.post("http://localhost:8080/api/login", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then(() => {
+        
+        
+        Swal.fire({
+  title: '로그인 성공',
+  icon: 'success',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
+        
         store.commit("setAccount",1);
-        window.alert(res.data.message);
         loginState.isLoggedIn = true;
         
         //모달창 닫기
       })
         .catch((error) => {
-          console.log(error)
+        
           if (error.response.status == "400") {
-            window.alert(error.response.data.message);
+
+            Swal.fire({
+  title: '로그인 실패',
+  text: error.response.data.message,
+  icon: 'error',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
             state.form.password = "";
           }
         })
@@ -210,10 +230,19 @@ export default {
     const logout = () => {
 
       
-      axios.get("http://localhost:8080/api/logout", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then((res) => {
-        window.location.reload(true);
+      axios.get("http://localhost:8080/api/logout", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then(() => {
+        
+        Swal.fire({
+  title: '로그아웃',
+  icon: 'success',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
+                
         store.commit('setAccount',0);
-        window.alert(res.data.message);
         loginState.isLoggedIn = false;
       })
         .catch((error) => {
@@ -238,17 +267,37 @@ axios.post("http://localhost:8080/api/sign-up",
   { 'Content-Type': 'application/json', withCredentials: true }
 
 )
-  .then((res) => {
+  .then(() => {
+
+    Swal.fire({
+  title: '회원가입 성공',
+  icon: 'success',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
     window.location.reload(true);
+  }
+})
+
+
+
+
     store.commit("setAccount",1);
-    window.alert(res.data.message);
     loginState.isLoggedIn = true;
   })
   .catch((error) => {
-    console.log(error)
-    if (error.response.status == "400") {
-      window.alert(error.response.data.message);
-    }
+    Swal.fire({
+  title: '회원가입 실패',
+  text: error.response.data.message,
+  icon: 'fail',
+  confirmButtonText: '확인'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.reload(true);
+  }
+})
+
+  
   })
 
 }
