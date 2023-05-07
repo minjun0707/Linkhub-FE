@@ -166,8 +166,12 @@ export default {
 
           console.log(error)
           if (error.response.status == "400") {
+      
             window.alert(error.response.data.message);
+            window.location.reload(true);
           }
+
+          
         })
 
     }
@@ -187,11 +191,13 @@ export default {
          
           console.log(res.data.message);
           window.alert(res.data.message);
+          window.location.reload(true);
         })
         .catch((error) => {
           console.log(error)
           if (error.response.status == "400") {
             window.alert(error.response.data.message);
+            window.location.reload(true);
           }
         })
 

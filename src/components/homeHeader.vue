@@ -23,9 +23,15 @@
     <button @click="actionCall">ActionCall</button> -->
         <!-- <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-if="!$store.state.account.id">로그인</button> -->
         <!-- <button type="button" class="btn btn-outline-primary me-2" @click="logout()" v-else>로그아웃</button> -->
-        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-show="!loginState.isLoggedIn">로그인</button>
+
+        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-if="$store.state.account.id == 0">로그인</button>
+        <button type="button" class="btn btn-outline-primary me-2" v-if="$store.state.account.id == 1" @click="logout()">로그아웃</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signUp" v-if="$store.state.account.id == 0">회원가입</button>
+
+
+        <!-- <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-show="!loginState.isLoggedIn">로그인</button>
         <button type="button" class="btn btn-outline-primary me-2" v-show="loginState.isLoggedIn" @click="logout()">로그아웃</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signUp" v-show = "!loginState.isLoggedIn">회원가입</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signUp" v-show = "!loginState.isLoggedIn">회원가입</button> -->
       </div>
     </header>
   </div>
@@ -182,10 +188,14 @@ export default {
       console.log(state.form.email); 
       console.log(state.form.password);
 
+
+
       axios.post("http://localhost:8080/api/login", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then((res) => {
-        
+        window.location.reload(true);
+        store.commit("setAccount",1);
         window.alert(res.data.message);
         loginState.isLoggedIn = true;
+        
         //모달창 닫기
       })
         .catch((error) => {
@@ -199,8 +209,10 @@ export default {
 
     const logout = () => {
 
+      
       axios.get("http://localhost:8080/api/logout", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then((res) => {
-        store.commit('setAccount',1);
+        window.location.reload(true);
+        store.commit('setAccount',0);
         window.alert(res.data.message);
         loginState.isLoggedIn = false;
       })
@@ -227,6 +239,8 @@ axios.post("http://localhost:8080/api/sign-up",
 
 )
   .then((res) => {
+    window.location.reload(true);
+    store.commit("setAccount",1);
     window.alert(res.data.message);
     loginState.isLoggedIn = true;
   })

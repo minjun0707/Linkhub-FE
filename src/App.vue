@@ -2,7 +2,7 @@
 
   <homeHeader/>
   
-  <mainHome/>
+  <RouterView/>
 
   <homeFooter/>
 
@@ -12,14 +12,12 @@
 
 import homeHeader from "@/components/homeHeader"
 import homeFooter from '@/components/homeFooter'
-import mainHome from "./pages/mainHome.vue";
 
 export default {
   name: 'App',
   components: {
     homeHeader,
     homeFooter,
-    mainHome
 }
 }
 </script>
