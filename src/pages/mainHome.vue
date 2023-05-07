@@ -85,7 +85,7 @@
           <div class="col" v-for="(item, idx) in state.posts" :key="idx">
             <!-- <div class="col" v-for="i in 15" :key="i"> -->
 
-            <card :item="item" />
+            <mainCard :item="item" />
 
           </div>
 
@@ -106,13 +106,13 @@
 <script>
 
 axios.defaults.withCredentials = true;
-import card from '@/components/card'
+import mainCard from '@/components/mainCard'
 import axios from 'axios'
 import { reactive } from 'vue'
 export default {
   name: 'mainHome',
   components: {
-    card
+    mainCard
   },
 
   setup() {
