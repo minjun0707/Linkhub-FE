@@ -58,7 +58,7 @@
 
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                      <button type="button" class="btn btn-primary"  @click="postCreate()">저장</button>
+                      <button ref ="closeBtn" type="button" class="btn btn-primary"  @click="postCreate()">저장</button>
                     </div>
                   </div>
                 </div>
@@ -115,11 +115,6 @@ export default {
     card
   },
 
-
- 
-
-
-
   setup() {
 
     const state = reactive({
@@ -144,6 +139,7 @@ export default {
         img: ""
       }
     })
+
   
     axios.get("http://localhost:8080/api/board/read",{ withCredentials: true }).then((res) => {
       state.posts = res.data.data.postList;
@@ -166,7 +162,7 @@ export default {
         postTempState.form.img = res.data.data.img;
       })
         .catch((error) => {
-
+          
 
           console.log(error)
           if (error.response.status == "400") {
@@ -188,10 +184,9 @@ export default {
 
       )
         .then((res) => {
-          postTempState.form.url = res.data.data.url;
-          postTempState.form.title = res.data.data.title;
-          postTempState.form.description = res.data.data.description;
-          window.alert(res.data.data.message);
+         
+          console.log(res.data.message);
+          window.alert(res.data.message);
         })
         .catch((error) => {
           console.log(error)

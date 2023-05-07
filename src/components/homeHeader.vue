@@ -17,6 +17,12 @@
 
 
       <div class="col-md-3 text-end">
+        <!-- <h2>Count: {{ count }}</h2>
+    <h2>Double Count: {{ doublCount }}</h2>
+        <button @click="click">Click</button>
+    <button @click="actionCall">ActionCall</button> -->
+        <!-- <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-if="!$store.state.account.id">로그인</button> -->
+        <!-- <button type="button" class="btn btn-outline-primary me-2" @click="logout()" v-else>로그아웃</button> -->
         <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#login" v-show="!loginState.isLoggedIn">로그인</button>
         <button type="button" class="btn btn-outline-primary me-2" v-show="loginState.isLoggedIn" @click="logout()">로그아웃</button>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signUp" v-show = "!loginState.isLoggedIn">회원가입</button>
@@ -120,9 +126,32 @@
 
 import axios from "axios";
 import { reactive } from "vue";
+import store from "@/scripts/store";
+
 axios.defaults.withCredentials = true;
 export default {
   name: 'homeHeader',
+
+  // computed: {
+  //   count() {
+  //     // computed store 변수값을 추적 가능
+  //     return this.$store.state.count;
+  //   },
+  //   doublCount() {
+  //     // getters 호출
+  //     return this.$store.state.doubleCount;
+  //   },
+  // },
+  // methods: {
+  //   click() {
+  //     // commit을 사용해서 store의 mutations 호출
+  //     this.$store.commit("increment");
+  //   },
+  //   actionCall() {
+  //     // dispatch를 사용해서 store의 actions 호출
+  //     this.$store.dispatch("incrementAction");
+  //   },
+  // },
 
   setup() {
 
@@ -154,6 +183,7 @@ export default {
       console.log(state.form.password);
 
       axios.post("http://localhost:8080/api/login", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then((res) => {
+        
         window.alert(res.data.message);
         loginState.isLoggedIn = true;
         //모달창 닫기
@@ -170,6 +200,7 @@ export default {
     const logout = () => {
 
       axios.get("http://localhost:8080/api/logout", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then((res) => {
+        store.commit('setAccount',1);
         window.alert(res.data.message);
         loginState.isLoggedIn = false;
       })
