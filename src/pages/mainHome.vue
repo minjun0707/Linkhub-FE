@@ -106,10 +106,11 @@
 <script>
 
 axios.defaults.withCredentials = true;
-import Swal from 'sweetalert2';
 import mainCard from '@/components/mainCard'
 import axios from 'axios'
 import { reactive } from 'vue'
+import Swal from 'sweetalert2/dist/sweetalert2.min.js';
+
 export default {
   name: 'mainHome',
   components: {
@@ -142,7 +143,7 @@ export default {
     })
 
   
-    axios.get("http://localhost:8080/api/board/read",{ withCredentials: true }).then((res) => {
+    axios.get("/api/board/read",{ withCredentials: true }).then((res) => {
       state.posts = res.data.data.postList;
     })
 
@@ -152,7 +153,7 @@ export default {
     
 
     
-      axios.post("http://localhost:8080/api/board/create/temp", {
+      axios.post("/api/board/create/temp", {
         url : urlState.url
       },
       { 'Content-Type': 'application/json', withCredentials: true }
@@ -190,7 +191,7 @@ export default {
 
     const postCreate = () => {
 
-      axios.post("http://localhost:8080/api/board/create",
+      axios.post("/api/board/create",
         {
           title: postTempState.form.title,
           description: postTempState.form.description,

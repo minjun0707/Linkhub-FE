@@ -127,13 +127,12 @@
 </template>
 
 
-
 <script>
 
 import axios from "axios";
 import { reactive } from "vue";
 import store from "@/scripts/store";
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.min.js';
 
 
 axios.defaults.withCredentials = true;
@@ -190,7 +189,7 @@ export default {
     
   
 
-      axios.post("http://localhost:8080/api/login", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then(() => {
+      axios.post("/api/login", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then(() => {
         
         
         Swal.fire({
@@ -230,7 +229,7 @@ export default {
     const logout = () => {
 
       
-      axios.get("http://localhost:8080/api/logout", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then(() => {
+      axios.get("/api/logout", state.form, { 'Content-Type': 'application/json', withCredentials: true }).then(() => {
         
         Swal.fire({
   title: '로그아웃',
@@ -257,7 +256,7 @@ export default {
 
     const signUp = () => {
 
-axios.post("http://localhost:8080/api/sign-up",
+axios.post("/api/sign-up",
   {
     email: signUpState.form.email,
     name: signUpState.form.name,
