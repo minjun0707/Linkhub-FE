@@ -2,8 +2,8 @@ name: deploy-to-s3-front
 
 on:
   push:
-      branches: [ main ]
   workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
