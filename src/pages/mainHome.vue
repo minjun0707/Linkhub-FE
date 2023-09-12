@@ -45,10 +45,10 @@
                           </div>
                           <div class="col-md-7">
                             <div class="card-body">
-                              <h5 class="card-title">{{ postTempState.form.title }}</h5>
+                              <input class="card-title" v-model="postTempState.form.title">
                               <p class="card-text"></p>
-                              <p class="card-text"><small class="text-muted">{{ postTempState.form.description }}</small>
-                              </p>
+                              <textarea cols=24 rows=6 v-model="postTempState.form.description">default</textarea>
+                             
                             </div>
                           </div>
                         </div>
