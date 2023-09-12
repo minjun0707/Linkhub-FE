@@ -19,4 +19,4 @@ const router = createRouter({
     history : createWebHistory(),
     routes
 })
-createApp(App).use(store).use(router).mount('#app')
+createApp(App).use(store).use(router).mount('#app') 
